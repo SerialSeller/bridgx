@@ -27,6 +27,7 @@ export const listMine = query({
   handler: async (ctx, args) => {
     const me = await requireProfileKey(ctx, args.fromId, args.editKey)
     const saves = await ctx.db.query('saves').withIndex('by_from', (q) => q.eq('fromId', args.fromId)).order('desc').collect()
+    saves.sort((a, b) => b._creationTime - a._creationTime)
     const attendees = await Promise.all(saves.map((save) => ctx.db.get(save.toId)))
     return Promise.all(attendees.flatMap((attendee) => attendee && attendee.eventId === me.eventId ? [publicAttendee(ctx, attendee)] : []))
   },

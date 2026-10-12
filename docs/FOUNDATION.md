@@ -8,7 +8,7 @@ Scope: implement the existing contract in AGENTS.md and docs/SPEC.md, in card or
 
 Validation: build and strict type checks before each PR. C1 additionally tests real Convex functions for secret omission, rejected edit keys, event boundaries, save toggling, recent ordering, and photo URLs. Push C1 to the connected dev deployment. Request Codex review before any merge.
 
-External prerequisites: the connected Trello account currently has no BridgX board. Card transitions need the board URL/access. Abdullah's write invitation needs his GitHub username. S2 needs FAL_KEY in ignored .env.local.
+Setup verified on 12 Oct 2026: [public repository](https://github.com/SerialSeller/bridgx), [Trello board](https://trello.com/b/HW5r8YxD/bridgx-codex-hackathon), and GitHub write access for Abdullahbit. The fal server values are configured on BridgX dev; production configuration belongs to S3.
 
 ## S2 verified provider
 
@@ -38,4 +38,4 @@ After joining, call `setIdentity(slug, { attendeeId, editKey })` from `src/lib/i
 
 Upload flow: call generateUploadUrl, POST a file with its Content-Type to that URL, read the returned storageId, pass it as photoId when saving the profile. Browsing does not need an identity; profile updates and both save operations verify the editKey on the server. Saves reject cross-event targets.
 
-C1 validation: 7 tests pass, covering event/profile secret omission, edit-key rejection, event isolation, recent ordering, save toggles and cross-event rejection, photo URLs, upload URL generation, and identity storage failures. Build, root TypeScript check, strict frontend/backend/test typechecks and lint pass. All 11 registered functions are present on the BridgX dev deployment; a live missing-event query returns null. Browser and phone testing are pending the screen cards.
+C1 validation: 8 tests pass, covering event/profile secret omission, edit-key rejection, event isolation, recent ordering, saves ordered by their creation time, save toggles and cross-event rejection, photo URLs, upload URL generation, and identity storage failures. Build, root TypeScript check, strict frontend/backend/test typechecks and lint pass. All 11 registered functions are present on the BridgX dev deployment; a live missing-event query returns null. Browser and phone testing are pending the screen cards.

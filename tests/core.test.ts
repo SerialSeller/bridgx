@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 import { convexTest } from 'convex-test'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { api } from '../convex/_generated/api'
 import schema from '../convex/schema'
 
@@ -87,6 +87,27 @@ describe('core contract', () => {
       return ctx.db.insert('attendees', { eventId: id, ...profile, editKey: 'secret' })
     })
     await expect(t.mutation(api.saves.toggle, { ...args, toId: cross })).rejects.toThrow('same event')
+  })
+
+  test('puts the most recently saved person first even when IDs sort differently', async () => {
+    vi.useFakeTimers()
+    try {
+      const { t, eventId, me } = await setup()
+      const a = await t.mutation(api.attendees.create, { eventId, ...profile, name: 'First' })
+      const b = await t.mutation(api.attendees.create, { eventId, ...profile, name: 'Second' })
+      const auth = { fromId: me.attendeeId, editKey: me.editKey }
+      await t.mutation(api.saves.toggle, { ...auth, toId: a.attendeeId })
+      await t.mutation(api.saves.toggle, { ...auth, toId: b.attendeeId })
+      const before = await t.query(api.saves.listMine, auth)
+      const last = before[1]._id
+      await t.mutation(api.saves.toggle, { ...auth, toId: last })
+      vi.setSystemTime(Date.now() + 1000)
+      await t.mutation(api.saves.toggle, { ...auth, toId: last })
+      const after = await t.query(api.saves.listMine, auth)
+      expect(after[0]._id).toBe(last)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   test('validates tags and turns a stored photo into a public URL', async () => {
