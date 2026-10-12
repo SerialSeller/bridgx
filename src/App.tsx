@@ -294,7 +294,7 @@ function AdminPage() {
             {notice && <p role="status" className="mt-3 flex items-center gap-1.5 text-sm text-brand"><Check size={15} /> {notice}</p>}
           </div>
           <div className="mx-auto rounded-2xl border border-line bg-white p-3 shadow-card sm:mx-0">
-            <QRCodeCanvas ref={qrCanvas} value={joinUrl} size={512} level="H" includeMargin className="size-56 sm:size-60" aria-label="Event join QR code" />
+            <QRCodeCanvas ref={qrCanvas} value={joinUrl} size={512} level="H" includeMargin style={{ width: 240, height: 240 }} aria-label="Event join QR code" />
           </div>
         </Card>
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
