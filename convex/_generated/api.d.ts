@@ -8,13 +8,27 @@
  * @module
  */
 
+import type * as attendees from "../attendees.js";
+import type * as events from "../events.js";
+import type * as files from "../files.js";
+import type * as lib_profiles from "../lib/profiles.js";
+import type * as saves from "../saves.js";
+import type * as tags from "../tags.js";
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
 
-declare const fullApi: ApiFromModules<{}>;
+declare const fullApi: ApiFromModules<{
+  attendees: typeof attendees;
+  events: typeof events;
+  files: typeof files;
+  "lib/profiles": typeof lib_profiles;
+  saves: typeof saves;
+  tags: typeof tags;
+}>;
 
 /**
  * A utility for referencing Convex functions in your app's public API.
