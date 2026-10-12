@@ -7,12 +7,13 @@ import { deflateSync } from 'node:zlib'
 
 const local = Object.assign({}, ...['.env', '.env.local'].filter(existsSync).map((path) => parseEnv(readFileSync(path, 'utf8'))))
 const key = local.FAL_KEY || process.env.FAL_KEY
-if (!key || /[\r\n"]/.test(key)) {
-  console.error('Add FAL_KEY to the ignored .env.local file before running the smoke test.')
+const auth = local.LLM_AUTH || process.env.LLM_AUTH || (key ? `Key ${key}` : '')
+if (!auth || /[\r\n"]/.test(auth)) {
+  console.error('Add FAL_KEY or LLM_AUTH to an ignored .env/.env.local file before running the smoke test.')
   process.exit(1)
 }
-const baseUrl = 'https://fal.run/openrouter/router/openai/v1'
-const models = [local.LLM_MODEL || 'openai/gpt-6-luna']
+const baseUrl = (local.LLM_BASE_URL || process.env.LLM_BASE_URL || 'https://fal.run/openrouter/router/openai/v1').replace(/\/+$/, '')
+const models = [local.LLM_MODEL || process.env.LLM_MODEL || 'openai/gpt-6-luna']
 const directory = mkdtempSync(join(tmpdir(), 'bridgx-ai-'))
 
 // A synthetic red PNG proves vision without sharing anyone's profile or contact details.
@@ -56,7 +57,7 @@ function call(model, content, name) {
     '--config', '-', '--request', 'POST', '--data-binary', `@${input}`,
     '--output', output, '--write-out', '%{http_code}', `${baseUrl}/chat/completions`,
   ], {
-    input: `header = "Authorization: Key ${key}"\nheader = "Content-Type: application/json"\n`,
+    input: `header = "Authorization: ${auth}"\nheader = "Content-Type: application/json"\n`,
     encoding: 'utf8', timeout: 65000,
   })
   if (result.status !== 0) throw new Error(`${name}: HTTP ${result.stdout || 'unavailable'}`)
