@@ -12,7 +12,7 @@ if (!key || /[\r\n"]/.test(key)) {
   process.exit(1)
 }
 const baseUrl = 'https://fal.run/openrouter/router/openai/v1'
-const models = [...new Set([local.LLM_MODEL || 'openai/gpt-6-luna', 'openai/gpt-5.6-luna'])]
+const models = [local.LLM_MODEL || 'openai/gpt-6-luna']
 const directory = mkdtempSync(join(tmpdir(), 'bridgx-ai-'))
 
 // A synthetic red PNG proves vision without sharing anyone's profile or contact details.
@@ -52,7 +52,7 @@ function call(model, content, name) {
   }))
   // Supply the credential via stdin, not argv or shell interpolation.
   const result = spawnSync('curl', [
-    '--silent', '--show-error', '--fail-with-body', '--max-time', '60',
+    '--disable', '--silent', '--show-error', '--fail-with-body', '--max-time', '60',
     '--config', '-', '--request', 'POST', '--data-binary', `@${input}`,
     '--output', output, '--write-out', '%{http_code}', `${baseUrl}/chat/completions`,
   ], {
