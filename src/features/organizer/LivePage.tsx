@@ -74,13 +74,13 @@ export function LivePage() {
   const joinUrl = `${window.location.origin}/e/${slug}`
   const joinLabel = `${window.location.host}/e/${slug}`
   const total = count ?? all?.length ?? 0
-  const feed = (recent ?? []).slice(0, 6)
+  const feed = (recent ?? []).slice(0, 8)
 
   const tally = new Map<string, number>()
   for (const person of all ?? []) {
     for (const tag of person.seeking ?? []) tally.set(tag, (tally.get(tag) ?? 0) + 1)
   }
-  const topNeeds = [...tally.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)
+  const topNeeds = [...tally.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6)
   const maxNeed = topNeeds[0]?.[1] ?? 0
 
   return (
