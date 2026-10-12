@@ -1,13 +1,26 @@
 @import "tailwindcss";
 
+@theme {
+  --color-canvas: #f5f8f7;
+  --color-ink: #183331;
+  --color-muted: #657875;
+  --color-brand: #16877b;
+  --color-brand-deep: #116e65;
+  --color-aqua: #e4f5f1;
+  --color-line: #e2ebe8;
+  --font-display: "Avenir Next", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --shadow-card: 0 8px 26px rgb(24 51 49 / 5%);
+  --shadow-lift: 0 14px 36px rgb(24 51 49 / 10%);
+}
+
 :root {
-  font-family: system-ui, sans-serif;
-  color: #0f172a;
-  background: #fafaf9;
+  font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  color: #183331;
+  background: #f5f8f7;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-body { margin: 0; min-width: 320px; }
+body { margin: 0; min-width: 320px; min-height: 100svh; }
