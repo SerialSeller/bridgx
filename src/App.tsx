@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  Bookmark,
   CalendarDays,
   Check,
   Compass,
@@ -11,7 +10,7 @@ import {
   UsersRound,
 } from 'lucide-react'
 import { useMutation, useQuery } from 'convex/react'
-import { useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { api } from '../convex/_generated/api'
 import type { Id } from '../convex/_generated/dataModel'
 import { QRCodeCanvas } from 'qrcode.react'
@@ -30,13 +29,17 @@ import {
 import { Avatar } from './components/ui/Avatar'
 import { Button } from './components/ui/Button'
 import { Card } from './components/ui/Card'
-import { EmptyState } from './components/ui/EmptyState'
 import { Spinner } from './components/ui/Spinner'
 import { Sheet } from './components/ui/Sheet'
 import { TabBar } from './components/ui/TabBar'
+import { RoleSwitch } from './components/ui/RoleSwitch'
+import { setAdminKey } from './lib/adminKey'
 import { PeoplePage, PersonPage } from './features/directory/DirectoryPages'
 import { MatchesPage } from './features/matches/MatchesPage'
 import { JoinPage } from './features/onboarding/JoinPage'
+import { SavedPage } from './features/saved/SavedPage'
+import { LivePage } from './features/organizer/LivePage'
+import { PosterPage } from './features/organizer/PosterPage'
 import { EventErrorBoundary } from './lib/EventErrorBoundary'
 import './lib/design.css'
 
@@ -124,7 +127,7 @@ function EventLayout() {
       <div className="mx-auto flex min-h-svh w-full max-w-md flex-col px-5 pb-28 pt-6 sm:px-7">
         <header className="mb-8 flex items-center justify-between">
           <Brand />
-          <span className="rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-muted shadow-sm">Event space</span>
+          <RoleSwitch slug={slug} active="attendee" />
         </header>
         <main className="flex-1"><Outlet context={{ event, attendeeCount }} /></main>
         <TabBar slug={slug} />
@@ -136,9 +139,10 @@ function EventLayout() {
 function EventLandingPage() {
   const { slug = 'demo' } = useParams()
   const { event, attendeeCount } = useOutletContext<EventContext>()
+  const recent = useQuery(api.attendees.recent, { eventId: event._id })
   return (
     <>
-      <div className="mb-7 flex items-center gap-2 text-xs font-semibold text-muted"><CalendarDays size={15} aria-hidden="true" /> BridgX meetup</div>
+      <div className="mb-7 flex items-center gap-2 text-xs font-semibold text-muted"><CalendarDays size={15} aria-hidden="true" /> {event.date || 'Live now'}</div>
       <PageHeader eyebrow="You’re in the right place" title={event.name} detail="See who’s here and find a good reason to start a conversation." />
       <Card className="mb-5 overflow-hidden p-0">
         <div className="h-32 bg-brand" />
@@ -150,7 +154,7 @@ function EventLandingPage() {
             {event.location && <div className="flex items-center gap-2"><MapPin size={15} aria-hidden="true" /> {event.location}</div>}
           </div>}
           <div className="mt-5 flex items-center gap-3 rounded-xl bg-canvas px-3 py-2.5">
-            <div className="flex -space-x-2"><Avatar name="Ayşe" size="sm" /><Avatar name="Deniz" size="sm" /><Avatar name="Mert" size="sm" /></div>
+            {recent && recent.length > 0 && <div className="flex -space-x-2">{recent.slice(0, 4).map((person) => <Avatar key={person._id} name={person.name} src={person.photoUrl ?? undefined} size="sm" className="ring-2 ring-white" />)}</div>}
             <span className="text-sm font-medium text-ink"><strong>{attendeeCount ?? '—'} people</strong> here</span>
           </div>
         </div>
@@ -163,9 +167,6 @@ function EventLandingPage() {
   )
 }
 
-function SavedPlaceholder() {
-  return <><PageHeader eyebrow="Saved" title="People worth remembering" detail="Keep the connections you want to follow up with." /><EmptyState icon={<Bookmark size={22} />} title="No saved people yet" description="Tap the bookmark on a profile to keep it close. You can export your list later." action={<Button asChild variant="secondary" size="sm"><Link to="../people">Browse people</Link></Button>} /></>
-}
 
 function CreateEventPage() {
   const createEvent = useMutation(api.events.create)
@@ -186,6 +187,7 @@ function CreateEventPage() {
         ...(date ? { date } : {}),
         ...(location.trim() ? { location: location.trim() } : {}),
       })
+      setAdminKey(created.slug, created.adminKey)
       navigate(`/e/${created.slug}/admin?key=${encodeURIComponent(created.adminKey)}`)
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Could not create the event. Please try again.')
@@ -239,6 +241,7 @@ function AdminPage() {
   const { slug = '' } = useParams()
   const [searchParams] = useSearchParams()
   const adminKey = searchParams.get('key')
+  useEffect(() => { if (adminKey) setAdminKey(slug, adminKey) }, [slug, adminKey])
   const event = useQuery(api.events.getBySlug, { slug })
   const attendeeCount = useQuery(api.attendees.count, event ? { eventId: event._id } : 'skip')
   const qrCanvas = useRef<HTMLCanvasElement>(null)
@@ -278,7 +281,7 @@ function AdminPage() {
   return (
     <main className="min-h-svh bg-canvas">
       <div className="mx-auto w-full max-w-2xl px-5 py-7 sm:px-8">
-        <header className="mb-10 flex items-center justify-between"><Brand /><span className="rounded-full bg-aqua px-3 py-1.5 text-xs font-bold text-brand">Organizer</span></header>
+        <header className="mb-10 flex items-center justify-between gap-3"><Brand /><RoleSwitch slug={slug} active="organizer" /></header>
         <PageHeader eyebrow="Your event is ready" title={event.name} detail="Put this link or QR in front of the room. People can join without installing an app." />
         <Card className="grid gap-6 p-5 sm:grid-cols-[1fr_auto] sm:items-center sm:p-7">
           <div>
@@ -305,10 +308,6 @@ function AdminPage() {
   )
 }
 
-function OrganizerPlaceholder({ title, detail }: { title: string; detail: string }) {
-  const { slug = 'demo' } = useParams()
-  return <div className="min-h-svh bg-canvas"><main className="mx-auto w-full max-w-md px-5 py-7 sm:px-7"><header className="mb-12"><Brand /></header><PageHeader eyebrow="Event organizer" title={title} detail={detail} /><Card className="mb-4 flex items-center gap-3 p-4"><div className="grid size-11 place-items-center rounded-2xl bg-aqua text-brand"><Spinner size="sm" /></div><div><p className="text-sm font-semibold text-ink">Event data will appear here</p><p className="mt-1 text-xs text-muted">This view is ready for your event.</p></div></Card><div className="grid grid-cols-2 gap-3"><Button asChild variant="secondary" size="sm"><Link to={`/e/${slug}/live`}>Live screen</Link></Button><Button asChild variant="secondary" size="sm"><Link to={`/e/${slug}/poster`}>Event poster</Link></Button></div><Link to={`/e/${slug}`} className="mt-7 inline-block text-sm font-semibold text-brand">← Back to event</Link></main></div>
-}
 
 function NotFoundPage() {
   return <main className="mx-auto flex min-h-svh max-w-md flex-col justify-center px-6"><PageHeader eyebrow="404 · Page not found" title="That page isn’t here." detail="Try going back to the event or start from the home page." /><Button asChild><Link to="/">Go home <ArrowRight size={16} /></Link></Button></main>
@@ -327,11 +326,11 @@ function AppRoutes() {
         <Route path="people" element={<PeoplePage />} />
         <Route path="p/:id" element={<PersonPage />} />
         <Route path="matches" element={<MatchesPage />} />
-        <Route path="saved" element={<SavedPlaceholder />} />
+        <Route path="saved" element={<SavedPage />} />
       </Route>
       <Route path="/e/:slug/admin" element={<ConvexRequired><AdminPage /></ConvexRequired>} />
-      <Route path="/e/:slug/live" element={<OrganizerPlaceholder title="The room is coming together." detail="A live view for the big screen, built for everyone to read." />} />
-      <Route path="/e/:slug/poster" element={<OrganizerPlaceholder title="A warm welcome starts here." detail="Print a simple poster that gets people meeting." />} />
+      <Route path="/e/:slug/live" element={<ConvexRequired><LivePage /></ConvexRequired>} />
+      <Route path="/e/:slug/poster" element={<ConvexRequired><PosterPage /></ConvexRequired>} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes></EventErrorBoundary>
   )
