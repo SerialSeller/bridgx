@@ -9,6 +9,7 @@ import { INDUSTRY_TAGS, NEED_TAGS } from '../../../convex/tags'
 import { clearIdentity, getIdentity, setIdentity } from '../../lib/identity'
 import { draftFromExtracted, emptyDraft, profileFromDraft, validatePhoto } from './profileForm'
 import type { ProfileDraft } from './profileForm'
+import { TabBar } from '../../components/ui/TabBar'
 
 const inputClass = 'mt-2 w-full rounded-xl border border-smoke bg-white px-4 py-3 text-base text-ink placeholder:text-dim focus:border-ink focus:outline-none'
 const primaryClass = 'inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full border border-ink bg-gold px-7 text-sm font-bold text-ink disabled:border-concrete disabled:bg-concrete disabled:text-dim'
@@ -122,7 +123,7 @@ function JoinForm({ slug, editing }: { slug: string; editing: boolean }) {
     finally { setBusy(null) }
   }
 
-  return <main className="mx-auto min-h-svh w-full max-w-md bg-cream px-4 pb-10 pt-6 font-sans text-ink">
+  return <main className="mx-auto min-h-svh w-full max-w-md bg-cream px-4 pb-28 pt-6 font-sans text-ink">
     <header className="mb-8 flex items-center justify-between gap-4"><Link to={`/e/${slug}`} className="min-h-11 py-3 text-lg font-bold">BridgX</Link><span className="truncate text-xs text-dim">{event.name}</span></header>
     <p className="mb-3 text-sm text-dim">{editing ? 'Your profile' : `1 Tell us · 2 Review ${step === 2 ? '✓' : ''}`}</p>
     <h1 className="mb-6 text-[32px] font-bold leading-[1.15]">{editing ? 'Make your introduction yours.' : step === 1 ? 'Who are you, and who do you want to meet?' : 'Looks like you?'}</h1>
@@ -142,6 +143,7 @@ function JoinForm({ slug, editing }: { slug: string; editing: boolean }) {
         {!editing && <button className="min-h-11 text-sm underline underline-offset-4" type="button" onClick={() => setStep(1)}>Back to your introduction</button>}
       </form>}
     <div className="mt-5">{browse}</div>
+    <TabBar slug={slug} />
   </main>
 }
 
