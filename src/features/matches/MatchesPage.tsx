@@ -66,8 +66,8 @@ export function MatchesPage() {
   const requested = useRef(false)
   const [writing, setWriting] = useState(false)
 
-  // One AI call writes the intros for the top 3; until it lands, the tag-based text is shown.
-  const needsText = matches?.slice(0, 3).some((match) => !match.hasExplanation) ?? false
+  // One AI call writes the intros for every match; until it lands, the tag-based text is shown.
+  const needsText = matches?.some((match) => !match.hasExplanation) ?? false
   useEffect(() => {
     if (!identity || !needsText || requested.current) return
     requested.current = true

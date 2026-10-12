@@ -41,7 +41,7 @@ export const explanationPlan = internalQuery({
     const me = await requireProfileKey(ctx, attendeeId, editKey)
     const people = await ctx.db.query('attendees').withIndex('by_event', q => q.eq('eventId', me.eventId)).collect()
     const missing = []
-    for (const match of rankMatches(me, people).slice(0, 3)) {
+    for (const match of rankMatches(me, people).slice(0, 5)) {
       const cached = await ctx.db.query('matchText').withIndex('by_pair', q => q.eq('fromId', me._id).eq('toId', match.person._id)).unique()
       if (!cached) missing.push({ toId: match.person._id, person: profileText(match.person), ...fallbackMatch(match) })
     }
@@ -53,7 +53,7 @@ export const storeExplanations = internalMutation({
   args: { attendeeId: v.id('attendees'), editKey: v.string(), pairs: v.array(textPair) }, returns: v.null(),
   handler: async (ctx, { attendeeId, editKey, pairs }) => {
     const me = await requireProfileKey(ctx, attendeeId, editKey)
-    for (const pair of pairs.slice(0, 3)) {
+    for (const pair of pairs.slice(0, 5)) {
       const person = await ctx.db.get(pair.toId)
       if (!person || person.eventId !== me.eventId || pair.toId === attendeeId) continue
       const existing = await ctx.db.query('matchText').withIndex('by_pair', q => q.eq('fromId', attendeeId).eq('toId', pair.toId)).unique()
