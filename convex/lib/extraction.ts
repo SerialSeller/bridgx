@@ -19,7 +19,7 @@ export type Extracted = {
 export function redactContactDetails(text: string): string {
   return text
     .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[email removed]')
-    .replace(/(?:\+?\d[\d\s().-]{6,}\d)/g, '[phone removed]')
+    .replace(/(?:\+?\d[\d\s()./–—-]{5,}\d)/g, '[phone removed]')
 }
 
 export function safePublicUrl(value: unknown): string | undefined {

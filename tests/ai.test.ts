@@ -83,7 +83,7 @@ describe('profile extraction', () => {
     const result = await t.action(extract, {
       text: 'I build React fintech. Looking for a sales cofounder. Email me private@example.com or +90 555 123 45 67.',
       sources: [{ label: 'GitHub', content: 'Developer at private@example.com, +905551234567' }],
-      imageUrls: ['https://example.test/profile.png'],
+      imageUrls: ['https://example.test/profile.png'], imagesReviewed: true,
     })
     expect(result).toMatchObject({ offers: ['frontend', 'cofounder'], seeking: ['sales', 'cofounder'], industries: ['fintech'] })
     const request = JSON.parse(fetcher.mock.calls[0][1].body)
@@ -102,5 +102,25 @@ describe('profile extraction', () => {
     expect(await t.action(extract, { text: 'I am a developer', imageUrls: ['javascript:alert(1)'] })).toEqual(empty)
     const request = JSON.parse(fetcher.mock.calls[0][1].body)
     expect(request.messages[1].content.filter((p: { type: string }) => p.type === 'image_url')).toEqual([])
+  })
+
+  test('removes slash-separated and local seven-digit phone numbers from every text source', async () => {
+    const fetcher = vi.fn().mockResolvedValue(response('{}'))
+    vi.stubGlobal('fetch', fetcher)
+    const t = convexTest(schema, modules)
+    await t.action(extract, { text: 'Developer. Call 0555/1234567', sources: [{ label: 'Website', content: 'Phone: 5551234' }] })
+    const payload = fetcher.mock.calls[0][1].body
+    expect(payload).not.toContain('0555/1234567')
+    expect(payload).not.toContain('5551234')
+  })
+
+  test('never forwards screenshots until the caller confirms contact details were reviewed and removed', async () => {
+    const fetcher = vi.fn().mockResolvedValue(response('{}'))
+    vi.stubGlobal('fetch', fetcher)
+    const t = convexTest(schema, modules)
+    await t.action(extract, { text: 'Developer', imageUrls: ['https://example.test/unreviewed.png'] })
+    const payload = fetcher.mock.calls[0][1].body
+    expect(payload).not.toContain('unreviewed.png')
+    expect(payload).not.toContain('image_url')
   })
 })

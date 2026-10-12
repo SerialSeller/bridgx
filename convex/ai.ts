@@ -10,6 +10,8 @@ export const extractProfile = action({
     text: v.string(),
     sources: v.optional(v.array(v.object({ label: v.string(), content: v.string() }))),
     imageUrls: v.optional(v.array(v.string())),
+    // The upload/review UI must obtain this only after contact details are removed.
+    imagesReviewed: v.optional(v.boolean()),
   },
   returns: extractedValidator,
   handler: async (_ctx, args) => {
@@ -18,7 +20,7 @@ export const extractProfile = action({
       sections.push(`Source: ${redactContactDetails(source.label).slice(0, 80)}\n${redactContactDetails(source.content).slice(0, 5_000)}`)
     }
     const content: ContentPart[] = [{ type: 'text', text: sections.join('\n\n') }]
-    for (const image of (args.imageUrls ?? []).slice(0, 2)) {
+    for (const image of (args.imagesReviewed === true ? args.imageUrls ?? [] : []).slice(0, 2)) {
       const url = safePublicUrl(image)
       if (url?.startsWith('https://')) content.push({ type: 'image_url', image_url: { url } })
     }
