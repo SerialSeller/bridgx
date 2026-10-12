@@ -48,12 +48,12 @@ Use the Composio Trello tools to build this board exactly. Do it once; if a boar
   - [ ] Exact model slug recorded in AGENTS.md
 
 ### S3 · Netlify deploy
-- Labels: Abdullah, P0, frontend · Due: 2026-10-12T09:15:00.000Z
+- Labels: Musa, P0, frontend · Due: 2026-10-12T09:15:00.000Z
 - Description: Connect the GitHub repo to a new Netlify site. Build settings come from `netlify.toml`. Add `CONVEX_DEPLOY_KEY` (Convex dashboard → production deploy key) in Netlify env. After the first deploy, set the Convex **prod** env vars too (`npx convex env set --prod …`). Rename the site to something like `bridgx.netlify.app` if free.
 - Done when:
   - [ ] Pushing to `main` deploys automatically
   - [ ] Live URL opens on a phone, including a deep route like `/e/test` (SPA redirect works)
-  - [ ] Live URL posted in the team chat
+  - [ ] Live URL sent to Musa for review and team sharing
 
 ### S4 · Trello board
 - Labels: Abdullah, P0 · Due: 2026-10-12T09:00:00.000Z

@@ -55,8 +55,8 @@ Fill in the brackets and **delete any feature that didn't ship**.
 
 - **Team name:** BridgX
 - **One-line project description:** BridgX turns any event into a smart network: attendees scan one QR, get an AI-built profile in 20 seconds, and instantly see who they should meet, why, and what to say first — so nobody leaves a 300-person event having met only 8.
-- **Public GitHub repository link:** [https://github.com/…/bridgx]
-- **Live project/Demo link:** [https://bridgx.netlify.app]
+- **Public GitHub repository link:** [BridgX repository](https://github.com/SerialSeller/bridgx)
+- **Live project/Demo link:** [BridgX](https://bridgx-6or8.netlify.app)
 - **How did your team use Codex?**
   Codex was our whole build team. We wrote an AGENTS.md contract (stack, data model, folder ownership, rules) so two Codex sessions could build in parallel without conflicts. Codex scaffolded the repo, created and ran our Trello board through Composio (moving cards and linking PRs), built the Convex backend, the AI profile extraction and smart import, the matching engine, and every screen, reviewed our PRs, and fixed bugs we found testing on phones. [X] Codex tasks, [Y] PRs merged in one day.
 - **Did your team use fal.ai? For what?**
