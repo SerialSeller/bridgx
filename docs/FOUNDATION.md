@@ -9,3 +9,7 @@ Scope: implement the existing contract in AGENTS.md and docs/SPEC.md, in card or
 Validation: build and strict type checks before each PR. C1 additionally tests real Convex functions for secret omission, rejected edit keys, event boundaries, save toggling, recent ordering, and photo URLs. Push C1 to the connected dev deployment. Request Codex review before any merge.
 
 External prerequisites: the connected Trello account currently has no BridgX board. Card transitions need the board URL/access. Abdullah's write invitation needs his GitHub username. S2 needs FAL_KEY in ignored .env.local.
+
+## S2 verified provider
+
+On 12 Oct 2026, two curl requests to `https://fal.run/openrouter/router/openai/v1/chat/completions` passed with `openai/gpt-6-luna` and `response_format: { type: "json_object" }`. Text returned `{ "ok": true }`; vision read a synthetic red PNG via `image_url` and returned `{ "color": "red" }`. Run `npm run ai:smoke` to repeat with a key from ignored `.env` or `.env.local`. No attendee data is used.

@@ -46,7 +46,7 @@ npx convex env set GITHUB_TOKEN "<optional, raises GitHub API rate limit>"
 |---|---|---|
 | `LLM_BASE_URL` | Convex | OpenAI-compatible base URL (fal router) |
 | `LLM_AUTH` | Convex | Full `Authorization` header value. fal: `Key <FAL_KEY>`. OpenRouter: `Bearer <key>` |
-| `LLM_MODEL` | Convex | `openai/gpt-6-luna` (cheap, vision + JSON). Confirm the exact slug in the fal playground for `openrouter/router`; fallback `openai/gpt-5.6-luna` |
+| `LLM_MODEL` | Convex | `openai/gpt-6-luna` (cheap, vision + JSON). Verified 12 Oct 2026 with text JSON and image input against the fal router; fallback `openai/gpt-5.6-luna` |
 | `FAL_KEY` | Convex | fal Whisper (voice) and fal image endpoints |
 | `GITHUB_TOKEN` | Convex | optional, for smart import |
 | `CONVEX_DEPLOY_KEY` | Netlify | production deploy key from the Convex dashboard |
