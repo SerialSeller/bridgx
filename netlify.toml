@@ -6,16 +6,3 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-# Feature previews build the frontend against dev without deploying prod functions.
-[context.deploy-preview]
-  command = "npm run build"
-
-[context.deploy-preview.environment]
-  VITE_CONVEX_URL = "https://compassionate-perch-51.eu-west-1.convex.cloud"
-
-[context.branch-deploy]
-  command = "npm run build"
-
-[context.branch-deploy.environment]
-  VITE_CONVEX_URL = "https://compassionate-perch-51.eu-west-1.convex.cloud"
