@@ -34,6 +34,7 @@ import { Spinner } from './components/ui/Spinner'
 import { Sheet } from './components/ui/Sheet'
 import { TabBar } from './components/ui/TabBar'
 import { PeoplePage, PersonPage } from './features/directory/DirectoryPages'
+import { MatchesPage } from './features/matches/MatchesPage'
 
 function Brand({ compact = false }: { compact?: boolean }) {
   return (
@@ -161,10 +162,6 @@ function EventLandingPage() {
 
 function JoinPlaceholder() {
   return <><PageHeader eyebrow="Make your introduction" title="A little about you goes a long way." detail="Build a profile in about 20 seconds. You choose what to share." /><Card className="p-5"><div className="mb-4 grid size-12 place-items-center rounded-2xl bg-aqua text-brand"><Sparkles size={22} aria-hidden="true" /></div><p className="text-sm font-semibold text-ink">Your story, your way</p><p className="mt-2 text-sm leading-6 text-muted">Tell us what you do and who you’d like to meet. You can review everything before it’s shared.</p><Button className="mt-5 w-full" disabled>Build my profile <ArrowRight size={16} /></Button></Card><p className="mt-5 text-center text-xs text-muted">Skip, just browse</p></>
-}
-
-function MatchesPlaceholder() {
-  return <><PageHeader eyebrow="Matches" title="Who you should meet" detail="Thoughtful introductions start with a little context." /><EmptyState icon={<Sparkles size={22} />} title="Your matches are waiting" description="Join this event to see people who can help you—and people you can help." action={<Button asChild size="sm"><Link to="../join">Create my profile</Link></Button>} /></>
 }
 
 function SavedPlaceholder() {
@@ -328,7 +325,7 @@ function AppRoutes() {
         <Route path="join" element={<JoinPlaceholder />} />
         <Route path="people" element={<PeoplePage />} />
         <Route path="p/:id" element={<PersonPage />} />
-        <Route path="matches" element={<MatchesPlaceholder />} />
+        <Route path="matches" element={<MatchesPage />} />
         <Route path="saved" element={<SavedPlaceholder />} />
       </Route>
       <Route path="/e/:slug/admin" element={<ConvexRequired><AdminPage /></ConvexRequired>} />

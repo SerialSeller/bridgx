@@ -3,7 +3,9 @@ import { action } from './_generated/server'
 import { chatJSON } from './llm'
 import type { ContentPart } from './llm'
 import { extractedValidator, redactContactDetails, safePublicUrl, sanitizeExtracted } from './lib/extraction'
-import { EXTRACTION_PROMPT } from './prompts'
+import { EXTRACTION_PROMPT, MATCH_EXPLANATION_PROMPT } from './prompts'
+import { internal } from './_generated/api'
+import { sanitizeMatchText } from './lib/matching'
 
 export const extractProfile = action({
   args: {
@@ -29,5 +31,20 @@ export const extractProfile = action({
       { role: 'system', content: EXTRACTION_PROMPT }, { role: 'user', content },
     ])
     return sanitizeExtracted(result)
+  },
+})
+
+export const explainMatches = action({
+  args: { attendeeId: v.id('attendees'), editKey: v.string() }, returns: v.null(),
+  handler: async (ctx, args) => {
+    const plan = await ctx.runQuery(internal.matches.explanationPlan, args)
+    if (!plan.matches.length) return null
+    const redactProfile = (person: typeof plan.me) => ({ ...person, name: redactContactDetails(person.name), headline: redactContactDetails(person.headline), bio: redactContactDetails(person.bio) })
+    const input = { me: redactProfile(plan.me), matches: plan.matches.map(match => ({ toId: match.toId, person: redactProfile(match.person), why: redactContactDetails(match.why), icebreaker: redactContactDetails(match.icebreaker) })) }
+    const result: unknown = await chatJSON([{ role: 'system', content: MATCH_EXPLANATION_PROMPT }, { role: 'user', content: JSON.stringify(input) }])
+    const rows = result && typeof result === 'object' && 'matches' in result && Array.isArray(result.matches) ? result.matches : []
+    const pairs = plan.matches.map(match => ({ toId: match.toId, ...sanitizeMatchText(rows.find(row => row && typeof row === 'object' && row.toId === match.toId), match) }))
+    await ctx.runMutation(internal.matches.storeExplanations, { ...args, pairs })
+    return null
   },
 })
