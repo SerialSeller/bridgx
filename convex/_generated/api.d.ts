@@ -8,10 +8,14 @@
  * @module
  */
 
+import type * as ai from "../ai.js";
 import type * as attendees from "../attendees.js";
 import type * as events from "../events.js";
 import type * as files from "../files.js";
+import type * as lib_extraction from "../lib/extraction.js";
 import type * as lib_profiles from "../lib/profiles.js";
+import type * as llm from "../llm.js";
+import type * as prompts from "../prompts.js";
 import type * as saves from "../saves.js";
 import type * as tags from "../tags.js";
 
@@ -22,10 +26,14 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  ai: typeof ai;
   attendees: typeof attendees;
   events: typeof events;
   files: typeof files;
+  "lib/extraction": typeof lib_extraction;
   "lib/profiles": typeof lib_profiles;
+  llm: typeof llm;
+  prompts: typeof prompts;
   saves: typeof saves;
   tags: typeof tags;
 }>;
