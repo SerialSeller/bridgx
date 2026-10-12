@@ -22,6 +22,7 @@ import {
   Route,
   Routes,
   useNavigate,
+  useLocation,
   useOutletContext,
   useParams,
   useSearchParams,
@@ -34,6 +35,9 @@ import { Spinner } from './components/ui/Spinner'
 import { Sheet } from './components/ui/Sheet'
 import { TabBar } from './components/ui/TabBar'
 import { PeoplePage, PersonPage } from './features/directory/DirectoryPages'
+import { JoinPage } from './features/onboarding/JoinPage'
+import { EventErrorBoundary } from './lib/EventErrorBoundary'
+import './lib/design.css'
 
 function Brand({ compact = false }: { compact?: boolean }) {
   return (
@@ -157,10 +161,6 @@ function EventLandingPage() {
       </div>
     </>
   )
-}
-
-function JoinPlaceholder() {
-  return <><PageHeader eyebrow="Make your introduction" title="A little about you goes a long way." detail="Build a profile in about 20 seconds. You choose what to share." /><Card className="p-5"><div className="mb-4 grid size-12 place-items-center rounded-2xl bg-aqua text-brand"><Sparkles size={22} aria-hidden="true" /></div><p className="text-sm font-semibold text-ink">Your story, your way</p><p className="mt-2 text-sm leading-6 text-muted">Tell us what you do and who you’d like to meet. You can review everything before it’s shared.</p><Button className="mt-5 w-full" disabled>Build my profile <ArrowRight size={16} /></Button></Card><p className="mt-5 text-center text-xs text-muted">Skip, just browse</p></>
 }
 
 function MatchesPlaceholder() {
@@ -319,13 +319,15 @@ function NotFoundPage() {
 }
 
 function AppRoutes() {
+  const location = useLocation()
   return (
-    <Routes>
+    <EventErrorBoundary key={location.pathname + location.search}><Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/new" element={<ConvexRequired><CreateEventPage /></ConvexRequired>} />
+      <Route path="/e/:slug/join" element={<ConvexRequired><JoinPage /></ConvexRequired>} />
+      <Route path="/e/:slug/me" element={<ConvexRequired><JoinPage editMode /></ConvexRequired>} />
       <Route path="/e/:slug" element={<ConvexRequired><EventLayout /></ConvexRequired>}>
         <Route index element={<EventLandingPage />} />
-        <Route path="join" element={<JoinPlaceholder />} />
         <Route path="people" element={<PeoplePage />} />
         <Route path="p/:id" element={<PersonPage />} />
         <Route path="matches" element={<MatchesPlaceholder />} />
@@ -335,7 +337,7 @@ function AppRoutes() {
       <Route path="/e/:slug/live" element={<OrganizerPlaceholder title="The room is coming together." detail="A live view for the big screen, built for everyone to read." />} />
       <Route path="/e/:slug/poster" element={<OrganizerPlaceholder title="A warm welcome starts here." detail="Print a simple poster that gets people meeting." />} />
       <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+    </Routes></EventErrorBoundary>
   )
 }
 

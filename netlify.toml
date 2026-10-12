@@ -6,3 +6,10 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# C3 changes only the frontend; its phone preview uses the deployed C2 dev backend.
+[context."musa/C3-join"]
+  command = "npm run build"
+
+[context."musa/C3-join".environment]
+  VITE_CONVEX_URL = "https://compassionate-perch-51.eu-west-1.convex.cloud"
