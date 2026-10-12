@@ -7,7 +7,7 @@ const tabs = [
   { key: 'people', label: 'People', icon: UsersRound, path: 'people' },
   { key: 'matches', label: 'Matches', icon: WandSparkles, path: 'matches' },
   { key: 'saved', label: 'Saved', icon: Bookmark, path: 'saved' },
-  { key: 'me', label: 'Me', icon: UserRound, path: 'join' },
+  { key: 'me', label: 'Me', icon: UserRound, path: 'me' },
 ]
 
 export function TabBar({ slug }: TabBarProps) {

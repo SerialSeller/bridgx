@@ -6,6 +6,7 @@ Built today at the OpenAI Codex Hackathon (Istanbul, 12 Oct 2026). **Hard deadli
 
 Read before working:
 - `docs/SPEC.md` — what to build (screens, flows, matching, smart import)
+- `docs/DESIGN.md` — the shared visual contract for every UI change
 - `docs/TRELLO.md` — every task, owner, priority, acceptance criteria
 - `docs/PITCH.md` — demo script (build what the demo needs first)
 

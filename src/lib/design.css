@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --color-cream: #f0f0ec;
+  --color-pearl: #f7f7f3;
+  --color-concrete: #eaeae6;
+  --color-smoke: #d4d4d0;
+  --color-ink: #1a1a1a;
+  --color-charcoal: #4d4d4d;
+  --color-dim: #6d6868;
+  --color-ultramarine: #1009f6;
+  --color-royal: #505cf9;
+  --color-gold: #ffba09;
+  --color-tangerine: #ff3b09;
+  --color-mint: #00e9a7;
+  --color-sky: #add3e5;
+  --color-thistle: #e3c7de;
+}
+
+@layer base {
+  html { background: var(--color-cream); }
+  body { margin: 0; min-width: 320px; background: var(--color-cream); color: var(--color-ink); font-family: var(--font-sans); }
+  ::selection { background: var(--color-gold); color: var(--color-ink); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin { animation: none; }
+}
