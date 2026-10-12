@@ -7,7 +7,6 @@ import {
   Copy,
   Download,
   MapPin,
-  Search,
   Sparkles,
   UsersRound,
 } from 'lucide-react'
@@ -30,11 +29,11 @@ import {
 import { Avatar } from './components/ui/Avatar'
 import { Button } from './components/ui/Button'
 import { Card } from './components/ui/Card'
-import { Chip } from './components/ui/Chip'
 import { EmptyState } from './components/ui/EmptyState'
 import { Spinner } from './components/ui/Spinner'
 import { Sheet } from './components/ui/Sheet'
 import { TabBar } from './components/ui/TabBar'
+import { PeoplePage, PersonPage } from './features/directory/DirectoryPages'
 
 function Brand({ compact = false }: { compact?: boolean }) {
   return (
@@ -164,25 +163,12 @@ function JoinPlaceholder() {
   return <><PageHeader eyebrow="Make your introduction" title="A little about you goes a long way." detail="Build a profile in about 20 seconds. You choose what to share." /><Card className="p-5"><div className="mb-4 grid size-12 place-items-center rounded-2xl bg-aqua text-brand"><Sparkles size={22} aria-hidden="true" /></div><p className="text-sm font-semibold text-ink">Your story, your way</p><p className="mt-2 text-sm leading-6 text-muted">Tell us what you do and who you’d like to meet. You can review everything before it’s shared.</p><Button className="mt-5 w-full" disabled>Build my profile <ArrowRight size={16} /></Button></Card><p className="mt-5 text-center text-xs text-muted">Skip, just browse</p></>
 }
 
-function PeoplePlaceholder() {
-  return <><PageHeader eyebrow="People" title="Who’s in the room?" detail="Find a person, a skill, or the conversation you came for." /><label className="mb-4 flex items-center gap-3 rounded-2xl border border-line bg-white px-4 py-3 text-muted shadow-card"><Search size={18} aria-hidden="true" /><span className="text-sm">Search people</span></label><div className="mb-5 flex gap-2 overflow-x-auto pb-1"><Chip selected>All</Chip><Chip>Design</Chip><Chip>Product</Chip><Chip>Startups</Chip></div><div className="grid gap-3"><PersonPreview name="Ayşe Yılmaz" headline="Product designer · building in healthtech" tags={['UI/UX design','Healthtech']} /><PersonPreview name="Deniz Kaya" headline="Backend developer · open to cofounding" tags={['Backend dev','Co-founder']} /></div></>
-}
-
-function PersonPreview({ name, headline, tags }: { name: string; headline: string; tags: string[] }) {
-  return <Card className="flex items-start gap-3 p-4"><Avatar name={name} size="lg" /><div className="min-w-0 flex-1"><p className="font-semibold text-ink">{name}</p><p className="mt-1 text-sm leading-5 text-muted">{headline}</p><div className="mt-3 flex flex-wrap gap-1.5">{tags.map((tag) => <Chip key={tag} size="sm">{tag}</Chip>)}</div></div><button className="rounded-xl p-2 text-muted hover:bg-canvas hover:text-brand" aria-label={`Save ${name}`}><Bookmark size={18} /></button></Card>
-}
-
 function MatchesPlaceholder() {
   return <><PageHeader eyebrow="Matches" title="Who you should meet" detail="Thoughtful introductions start with a little context." /><EmptyState icon={<Sparkles size={22} />} title="Your matches are waiting" description="Join this event to see people who can help you—and people you can help." action={<Button asChild size="sm"><Link to="../join">Create my profile</Link></Button>} /></>
 }
 
 function SavedPlaceholder() {
   return <><PageHeader eyebrow="Saved" title="People worth remembering" detail="Keep the connections you want to follow up with." /><EmptyState icon={<Bookmark size={22} />} title="No saved people yet" description="Tap the bookmark on a profile to keep it close. You can export your list later." action={<Button asChild variant="secondary" size="sm"><Link to="../people">Browse people</Link></Button>} /></>
-}
-
-function PersonPagePlaceholder() {
-  const { id = 'person' } = useParams()
-  return <><Link to="../people" className="mb-6 inline-flex text-sm font-semibold text-brand">← All people</Link><Card className="p-5"><div className="flex items-center gap-4"><Avatar name={id} size="xl" /><div><h1 className="font-display text-xl font-bold text-ink">{id}</h1><p className="mt-1 text-sm text-muted">A little about me</p></div></div><div className="mt-6 flex flex-wrap gap-2"><Chip>Product</Chip><Chip>Co-founder</Chip></div><p className="mt-5 text-sm leading-6 text-muted">I’m here to meet thoughtful people and build something useful together.</p><Button variant="secondary" className="mt-5 w-full">Save this person <Bookmark size={16} /></Button></Card></>
 }
 
 function CreateEventPage() {
@@ -340,8 +326,8 @@ function AppRoutes() {
       <Route path="/e/:slug" element={<ConvexRequired><EventLayout /></ConvexRequired>}>
         <Route index element={<EventLandingPage />} />
         <Route path="join" element={<JoinPlaceholder />} />
-        <Route path="people" element={<PeoplePlaceholder />} />
-        <Route path="p/:id" element={<PersonPagePlaceholder />} />
+        <Route path="people" element={<PeoplePage />} />
+        <Route path="p/:id" element={<PersonPage />} />
         <Route path="matches" element={<MatchesPlaceholder />} />
         <Route path="saved" element={<SavedPlaceholder />} />
       </Route>
