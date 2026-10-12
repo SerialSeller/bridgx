@@ -53,7 +53,6 @@ function HomePage() {
   const [howItWorksOpen, setHowItWorksOpen] = useState(false)
   return (
     <main className="relative mx-auto flex min-h-svh w-full max-w-md flex-col overflow-hidden px-5 pb-10 pt-7 sm:px-7">
-      <div className="pointer-events-none absolute -right-24 top-20 size-72 rounded-full bg-aqua/60 blur-3xl" />
       <header className="relative flex items-center justify-between">
         <Brand />
         <span className="rounded-full border border-line bg-white/80 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">Meet better</span>
@@ -142,7 +141,7 @@ function EventLandingPage() {
       <div className="mb-7 flex items-center gap-2 text-xs font-semibold text-muted"><CalendarDays size={15} aria-hidden="true" /> BridgX meetup</div>
       <PageHeader eyebrow="You’re in the right place" title={event.name} detail="See who’s here and find a good reason to start a conversation." />
       <Card className="mb-5 overflow-hidden p-0">
-        <div className="h-32 bg-[radial-gradient(circle_at_78%_28%,rgba(29,135,121,0.45),transparent_24%),linear-gradient(135deg,#183934,#76c7b7)]" />
+        <div className="h-32 bg-brand" />
         <div className="p-5">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand">You’re invited</p>
           <h2 className="mt-2 font-display text-xl font-bold tracking-tight text-ink">{event.name}</h2>

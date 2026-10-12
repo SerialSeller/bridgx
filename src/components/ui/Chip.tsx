@@ -22,7 +22,7 @@ export function Chip({ selected, size = 'md', onSelectedChange, className = '', 
         if (selected === undefined) setUncontrolled(next)
         onSelectedChange?.(next)
       }}
-      className={`inline-flex shrink-0 items-center justify-center rounded-full border font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${dimensions} ${isSelected ? 'border-brand/20 bg-aqua text-brand' : 'border-line bg-white text-muted hover:border-brand/20 hover:text-brand'} ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full border font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${dimensions} ${isSelected ? 'border-ink bg-ink text-white' : 'border-line bg-white text-ink hover:border-ink/40'} ${className}`}
     >
       {children}
     </button>

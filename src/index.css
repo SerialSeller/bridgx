@@ -1,26 +1,44 @@
 @import "tailwindcss";
 
+/* BridgX design system — see docs: warm paper, one bold blue, one gold button, flat. */
 @theme {
-  --color-canvas: #f5f8f7;
-  --color-ink: #183331;
-  --color-muted: #657875;
-  --color-brand: #16877b;
-  --color-brand-deep: #116e65;
-  --color-aqua: #e4f5f1;
-  --color-line: #e2ebe8;
-  --font-display: "Avenir Next", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --shadow-card: 0 8px 26px rgb(24 51 49 / 5%);
-  --shadow-lift: 0 14px 36px rgb(24 51 49 / 10%);
+  --color-canvas: #f0f0ec;
+  --color-ink: #1a1a1a;
+  --color-muted: #4d4d4d;
+  --color-brand: #1009f6;
+  --color-brand-deep: #0a05b8;
+  --color-aqua: #e7e6fe;
+  --color-line: #e2e2dc;
+
+  --color-cream: #f0f0ec;
+  --color-pearl: #f7f7f3;
+  --color-concrete: #eaeae6;
+  --color-smoke: #d4d4d0;
+  --color-charcoal: #4d4d4d;
+  --color-dim: #6d6868;
+  --color-ultramarine: #1009f6;
+  --color-royal: #505cf9;
+  --color-gold: #ffba09;
+  --color-tangerine: #ff3b09;
+  --color-mint: #00e9a7;
+  --color-sky: #add3e5;
+  --color-thistle: #e3c7de;
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --shadow-card: 0 0 #0000;
+  --shadow-lift: 0 0 #0000;
 }
 
 :root {
-  font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
-  color: #183331;
-  background: #f5f8f7;
+  font-family: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #1a1a1a;
+  background: #f0f0ec;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-body { margin: 0; min-width: 320px; min-height: 100svh; }
+body { margin: 0; min-width: 320px; min-height: 100svh; background: #f0f0ec; }
+::selection { background: #ffba09; color: #1a1a1a; }
