@@ -1,4 +1,9 @@
-function App() {
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router'
+import { JoinPage } from './features/onboarding/JoinPage'
+import { EventErrorBoundary } from './lib/EventErrorBoundary'
+import './lib/design.css'
+
+function HomePlaceholder() {
   return (
     <main className="mx-auto flex min-h-svh max-w-md flex-col justify-center px-6 py-12">
       <p className="mb-8 text-lg font-semibold tracking-tight">BridgX</p>
@@ -13,6 +18,20 @@ function App() {
       </p>
     </main>
   )
+}
+
+function AppRoutes() {
+  const location = useLocation()
+  return <EventErrorBoundary key={location.pathname + location.search}><Routes>
+    <Route path="/e/:slug/join" element={<JoinPage />} />
+    <Route path="/e/:slug/me" element={<JoinPage editMode />} />
+    <Route path="*" element={<HomePlaceholder />} />
+  </Routes></EventErrorBoundary>
+}
+
+function App() {
+  if (!import.meta.env.VITE_CONVEX_URL) return <HomePlaceholder />
+  return <BrowserRouter><AppRoutes /></BrowserRouter>
 }
 
 export default App
