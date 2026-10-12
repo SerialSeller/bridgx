@@ -6,7 +6,6 @@ import { api } from '../../../convex/_generated/api'
 import { INDUSTRY_TAGS, NEED_TAGS } from '../../../convex/tags'
 import { Avatar } from '../../components/ui/Avatar'
 import { Button } from '../../components/ui/Button'
-import { Card } from '../../components/ui/Card'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Spinner } from '../../components/ui/Spinner'
 import { getIdentity } from '../../lib/identity'
@@ -102,24 +101,24 @@ export function MatchesPage() {
     <>
       {header}
       {writing && <p role="status" className="mb-4 flex items-center gap-2 text-xs font-semibold text-brand"><Spinner size="sm" /> Writing your intros…</p>}
-      <ol className="grid gap-4">
+      <ol className="flex min-w-0 flex-col gap-4">
         {matches.map((match, index) => {
           const top = index === 0
           const person = match.attendee
           const hi = sayHi(person.contacts)
           const kind = match.kind as Kind
           return (
-            <li key={person._id}>
-              <Card className={`p-5 ${top ? 'border-brand bg-brand text-white' : ''}`}>
+            <li key={person._id} className="min-w-0">
+              <div className={`min-w-0 overflow-hidden rounded-[24px] p-5 ${top ? 'bg-brand text-white' : 'border border-line bg-white'}`}>
                 <div className="flex items-start justify-between gap-3">
-                  <Link to={`/e/${slug}/p/${person._id}`} className={`flex min-w-0 items-center gap-3 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 ${top ? 'focus-visible:outline-white' : 'focus-visible:outline-brand'}`}>
+                  <Link to={`/e/${slug}/p/${person._id}`} className={`flex min-w-0 flex-1 items-center gap-3 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 ${top ? 'focus-visible:outline-white' : 'focus-visible:outline-brand'}`}>
                     <Avatar name={person.name} src={person.photoUrl ?? undefined} size="lg" />
                     <span className="min-w-0">
                       <span className={`block truncate font-display text-lg font-bold tracking-tight ${top ? 'text-white' : 'text-ink'}`}>{person.name}</span>
                       {person.headline && <span className={`block truncate text-sm ${top ? 'text-white/75' : 'text-muted'}`}>{person.headline}</span>}
                     </span>
                   </Link>
-                  <span className={`inline-flex min-h-7 shrink-0 items-center rounded-full px-2.5 text-[11px] font-bold ${top ? 'bg-white text-brand' : KIND_STYLE[kind]}`}>{top ? `Top match · ${KIND_LABEL[kind]}` : KIND_LABEL[kind]}</span>
+                  <span className={`inline-flex min-h-7 shrink-0 items-center rounded-full px-2.5 text-[11px] font-bold ${top ? 'bg-white text-brand' : KIND_STYLE[kind]}`}>{top ? 'Top match' : KIND_LABEL[kind]}</span>
                 </div>
 
                 {match.sharedTags.length > 0 && (
@@ -148,7 +147,7 @@ export function MatchesPage() {
                   )}
                   <Link to={`/e/${slug}/p/${person._id}`} className={`inline-flex min-h-10 items-center justify-center gap-1.5 text-sm font-semibold ${top ? 'text-white/85 hover:text-white' : 'text-brand'}`}>View profile <ArrowRight size={14} aria-hidden="true" /></Link>
                 </div>
-              </Card>
+              </div>
             </li>
           )
         })}
