@@ -35,6 +35,7 @@ import { Spinner } from './components/ui/Spinner'
 import { Sheet } from './components/ui/Sheet'
 import { TabBar } from './components/ui/TabBar'
 import { PeoplePage, PersonPage } from './features/directory/DirectoryPages'
+import { MatchesPage } from './features/matches/MatchesPage'
 import { JoinPage } from './features/onboarding/JoinPage'
 import { EventErrorBoundary } from './lib/EventErrorBoundary'
 import './lib/design.css'
@@ -160,10 +161,6 @@ function EventLandingPage() {
       </div>
     </>
   )
-}
-
-function MatchesPlaceholder() {
-  return <><PageHeader eyebrow="Matches" title="Who you should meet" detail="Thoughtful introductions start with a little context." /><EmptyState icon={<Sparkles size={22} />} title="Your matches are waiting" description="Join this event to see people who can help you—and people you can help." action={<Button asChild size="sm"><Link to="../join">Create my profile</Link></Button>} /></>
 }
 
 function SavedPlaceholder() {
@@ -329,7 +326,7 @@ function AppRoutes() {
         <Route index element={<EventLandingPage />} />
         <Route path="people" element={<PeoplePage />} />
         <Route path="p/:id" element={<PersonPage />} />
-        <Route path="matches" element={<MatchesPlaceholder />} />
+        <Route path="matches" element={<MatchesPage />} />
         <Route path="saved" element={<SavedPlaceholder />} />
       </Route>
       <Route path="/e/:slug/admin" element={<ConvexRequired><AdminPage /></ConvexRequired>} />

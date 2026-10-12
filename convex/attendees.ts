@@ -23,6 +23,9 @@ export const update = mutation({
       ...cleanProfile(profile), eventId: existing.eventId, editKey: existing.editKey,
       ...(existing.isSeed !== undefined ? { isSeed: existing.isSeed } : {}),
     })
+    const outgoing = await ctx.db.query('matchText').withIndex('by_pair', q => q.eq('fromId', attendeeId)).collect()
+    const incoming = await ctx.db.query('matchText').filter(q => q.eq(q.field('toId'), attendeeId)).collect()
+    for (const cached of [...outgoing, ...incoming]) await ctx.db.delete(cached._id)
     return null
   },
 })
