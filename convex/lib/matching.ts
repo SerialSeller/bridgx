@@ -35,17 +35,22 @@ export function fallbackMatch<T extends MatchProfile>(match: RankedMatch<T>) {
   const { person, overlap, kind } = match
   let why: string
   let topic: string
+  let icebreaker: string
+  const first = person.name.trim().split(/\s+/)[0] || person.name
   if (kind === 'helps-you') {
     topic = labels(overlap.need, NEED_TAGS)
     why = `You're looking for ${topic} and ${person.name} offers it.`
+    icebreaker = `Hi ${first}, I'm looking for ${topic.toLowerCase()} help. Got five minutes to compare notes?`
   } else if (kind === 'you-help') {
     topic = labels(overlap.give, NEED_TAGS)
     why = `${person.name} is looking for ${topic}; you can help.`
+    icebreaker = `Hi ${first}, I saw you're looking for ${topic.toLowerCase()}. That's what I do. What are you building?`
   } else {
     topic = overlap.industries.length ? labels(overlap.industries, INDUSTRY_TAGS) : labels(overlap.offers, NEED_TAGS)
     why = `You and ${person.name} share ${topic} interests.`
+    icebreaker = `Hi ${first}, we're both in ${topic.toLowerCase()}. What are you working on right now?`
   }
-  return { why: why.slice(0, 140), icebreaker: `What are you working on in ${topic}?`.slice(0, 120) }
+  return { why: why.slice(0, 140), icebreaker: icebreaker.slice(0, 120) }
 }
 
 export function sanitizeMatchText(value: unknown, fallback: { why: string; icebreaker: string }) {
